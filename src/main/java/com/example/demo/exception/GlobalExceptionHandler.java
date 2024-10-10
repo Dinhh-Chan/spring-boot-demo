@@ -9,14 +9,18 @@ import com.example.demo.dto.request.ApiResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handlingRuntimeException(RuntimeException exception){
+    @ExceptionHandler(value = AppException.class)
+    ResponseEntity<ApiResponse> handlingRuntimeException(AppException exception){
+        ErrorCode errorCode = exception.getErrorCode();
+        
         ApiResponse apiResponse = new ApiResponse();
-        apiResponse.setCode(1001);
+        apiResponse.setCode(errorCode.getCode());
+        apiResponse.setMessage(errorCode.getMessage());
         return ResponseEntity.badRequest().body(apiResponse);
     }
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<String> handlingValidation(MethodArgumentNotValidException exception){
         return ResponseEntity.badRequest().body(exception.getDetailMessageCode());
     }
+
 }
