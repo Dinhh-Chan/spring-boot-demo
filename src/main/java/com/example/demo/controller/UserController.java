@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.request.ApiResponse;
@@ -47,5 +48,15 @@ public class UserController {
     String deleteUser(@PathVariable String userId){
         userService.deleteUser(userId);
         return "user has been deleted";
+    }
+    @PostMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String password){
+        boolean isAuthenticated = userService.authenticate(username, password); 
+        if (isAuthenticated){
+            return  "Login successful!";
+        }
+        else {
+            return "Invalid username or password"; 
+        }
     }
 }
